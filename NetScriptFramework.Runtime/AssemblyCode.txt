@@ -1,0 +1,809 @@
+32 bit ReadDQFrom:
+mov eax, [esp+4]
+mov ecx, [esp+8]
+movdqu xmm0, [eax]
+movsd [ecx], xmm0
+ret
+
+64 bit ReadDQFrom:
+movdqu xmm0, [rcx]
+movsd [rdx], xmm0
+ret
+
+32 bit WriteDQTo:
+mov eax, [esp+4]
+mov ecx, [esp+8]
+movsd xmm0, [eax]
+movdqu [ecx], xmm0
+ret
+
+64 bit WriteDQTo:
+movsd xmm0, [rcx]
+movdqu [rdx], xmm0
+ret
+
+64 bit cdecl:
+			mov [rsp + 0x8], r12
+			mov [rsp + 0x10], r13
+			mov [rsp + 0x18], r14
+			mov [rsp + 0x20], r15
+			mov rax, rcx
+			sub rsp, 0x100
+			xor r13, r13
+			shl r13, 4
+			add r13, rdx
+					mov r12, r8
+					xor r15, r15
+				ProcessArg:
+			cmp r12, r13
+				jge EndArg
+				mov r14, [r12]
+				cmp r14, 1
+				je FloatArg0
+				add r12, 8
+				mov r14, r12
+				add r12, 8
+				jmp IntArg1
+				FloatArg0:
+			add r12, 8
+				mov r14, r12
+				add r12, 8
+				FloatArg1:
+				cmp r15, 0
+					jne FloatArg2
+					movsd xmm0, [r14]
+				inc r15
+					jmp ProcessArg
+					FloatArg2:
+				cmp r15, 1
+					jne FloatArg3
+					movsd xmm1, [r14]
+					inc r15
+					jmp ProcessArg
+					FloatArg3:
+				cmp r15, 2
+					jne FloatArg4
+					movsd xmm2, [r14]
+					inc r15
+					jmp ProcessArg
+					FloatArg4:
+				cmp r15, 3
+					jne FloatArg5
+					movsd xmm3, [r14]
+					inc r15
+					jmp ProcessArg
+					FloatArg5:
+				mov r14, [r14]
+					mov [rsp+r15*8], r14
+					inc r15
+					jmp ProcessArg
+					IntArg1:
+					cmp r15, 0
+					jne IntArg2
+					mov rcx, [r14]
+					inc r15
+					jmp ProcessArg
+					IntArg2 :
+				cmp r15, 1
+					jne IntArg3
+					mov rdx, [r14]
+					inc r15
+					jmp ProcessArg
+					IntArg3 :
+				cmp r15, 2
+					jne IntArg4
+					mov r8, [r14]
+					inc r15
+					jmp ProcessArg
+					IntArg4 :
+				cmp r15, 3
+					jne IntArg5
+					mov r9, [r14]
+					inc r15
+					jmp ProcessArg
+					IntArg5:
+				mov r14, [r14]
+					mov [rsp + r15 * 8], r14
+					inc r15
+					jmp ProcessArg
+					EndArg:
+				call rax
+					add rsp, 0x100
+					mov r12, [rsp + 0x8]
+					mov r13, [rsp + 0x10]
+					mov r14, [rsp + 0x18]
+					mov r15, [rsp + 0x20]
+					ret
+
+64 bit cdecl f:
+			mov [rsp + 0x8], r12
+			mov [rsp + 0x10], r13
+			mov [rsp + 0x18], r14
+			mov [rsp + 0x20], r15
+			mov rax, rcx
+			sub rsp, 0x100
+			xor r13, r13
+			shl r13, 4
+			add r13, rdx
+					mov r12, r8
+					xor r15, r15
+				ProcessArg:
+			cmp r12, r13
+				jge EndArg
+				mov r14, [r12]
+				cmp r14, 1
+				je FloatArg0
+				add r12, 8
+				mov r14, r12
+				add r12, 8
+				jmp IntArg1
+				FloatArg0:
+			add r12, 8
+				mov r14, r12
+				add r12, 8
+				FloatArg1:
+				cmp r15, 0
+					jne FloatArg2
+					movsd xmm0, [r14]
+				inc r15
+					jmp ProcessArg
+					FloatArg2:
+				cmp r15, 1
+					jne FloatArg3
+					movsd xmm1, [r14]
+					inc r15
+					jmp ProcessArg
+					FloatArg3:
+				cmp r15, 2
+					jne FloatArg4
+					movsd xmm2, [r14]
+					inc r15
+					jmp ProcessArg
+					FloatArg4:
+				cmp r15, 3
+					jne FloatArg5
+					movsd xmm3, [r14]
+					inc r15
+					jmp ProcessArg
+					FloatArg5:
+				mov r14, [r14]
+					mov [rsp+r15*8], r14
+					inc r15
+					jmp ProcessArg
+					IntArg1:
+					cmp r15, 0
+					jne IntArg2
+					mov rcx, [r14]
+					inc r15
+					jmp ProcessArg
+					IntArg2 :
+				cmp r15, 1
+					jne IntArg3
+					mov rdx, [r14]
+					inc r15
+					jmp ProcessArg
+					IntArg3 :
+				cmp r15, 2
+					jne IntArg4
+					mov r8, [r14]
+					inc r15
+					jmp ProcessArg
+					IntArg4 :
+				cmp r15, 3
+					jne IntArg5
+					mov r9, [r14]
+					inc r15
+					jmp ProcessArg
+					IntArg5:
+				mov r14, [r14]
+					mov [rsp + r15 * 8], r14
+					inc r15
+					jmp ProcessArg
+					EndArg:
+				call rax
+					add rsp, 0x100
+					mov r12, [rsp + 0x8]
+					mov r13, [rsp + 0x10]
+					mov r14, [rsp + 0x18]
+					mov r15, [rsp + 0x20]
+					movsd [rsp+8], xmm0
+					mov rax, [rsp+8]
+					ret
+					
+32 bit cdecl:
+	push    ebp
+	mov     ebp, esp
+	sub     esp, 8
+	mov     eax, [ebp+_argCount]
+	mov     [ebp+_funcAddress], eax
+	mov     eax, [ebp+_addEsp]
+	mov     [ebp+arg_4], eax
+	shl     eax, 2
+	mov     [ebp+result], 0
+	mov     [ebp+arg_C], eax
+	pushf
+	mov     edx, [ebp+arg_4]
+	shl     edx, 3
+	mov     ecx, [ebp+argData]
+	add     edx, ecx
+	PushLoop:
+	cmp     ecx, edx
+	jge     short PushContinue
+	mov     eax, [ecx]
+	add     ecx, 8
+	push    eax
+	jmp     short PushLoop
+	PushContinue:
+	mov     eax, [ebp+_funcAddress]
+	call    eax
+	mov     [ebp+result], eax
+	mov     eax, [ebp+arg_C]
+	add     esp, eax
+	popf
+	mov     eax, [ebp+result]
+	xor     edx, edx
+	mov     esp, ebp
+	pop     ebp
+	retn    14h
+					
+32 bit cdecl f:
+	push    ebp
+	mov     ebp, esp
+	sub     esp, 0Ch
+	mov     eax, [ebp+_argCount]
+	xorps   xmm0, xmm0
+	mov     [ebp+_funcAddress], eax
+	mov     eax, [ebp+_addEsp]
+	mov     [ebp+arg_4], eax
+	shl     eax, 2
+	movlpd  [ebp+result], xmm0
+	mov     [ebp+arg_C], eax
+	pushf
+	mov     edx, [ebp+arg_4]
+	shl     edx, 3
+	mov     ecx, [ebp+argData]
+	add     edx, ecx
+	PushLoop_0:
+	cmp     ecx, edx
+	jge     short PushContinue_0
+	mov     eax, [ecx]
+	add     ecx, 8
+	push    eax
+	jmp     short PushLoop_0
+	PushContinue_0:
+	mov     eax, [ebp+_funcAddress]
+	call    eax
+	fstp    [ebp+result]
+	mov     eax, [ebp+arg_C]
+	add     esp, eax
+	popf
+	mov     eax, dword ptr [ebp+result]
+	mov     edx, dword ptr [ebp+result+4]
+	mov     esp, ebp
+	pop     ebp
+	retn    14h
+	
+32 bit thiscall:
+	push    ebp
+	mov     ebp, esp
+	push    ecx
+	mov     eax, [ebp+_argCount]
+	mov     [ebp+arg_14], eax
+	mov     eax, [ebp+_funcAddress]
+	mov     [ebp+arg_C], eax
+	mov     eax, [ebp+_thisAddress]
+	mov     [ebp+result], 0
+	mov     [ebp+arg_4], eax
+	pushf
+	mov     edx, [ebp+arg_14]
+	shl     edx, 3
+	mov     ecx, [ebp+argData]
+	add     edx, ecx
+	ThisCallPush:
+	cmp     ecx, edx
+	jge     short ThisCallContinue
+	mov     eax, [ecx]
+	add     ecx, 8
+	push    eax
+	jmp     short ThisCallPush
+	ThisCallContinue:
+	mov     eax, [ebp+arg_C]
+	mov     ecx, [ebp+arg_4]
+	call    eax
+	mov     [ebp+result], eax
+	popf
+	mov     eax, [ebp+result]
+	xor     edx, edx
+	mov     esp, ebp
+	pop     ebp
+	retn    1Ch
+	
+32 bit thiscall f:
+	push    ebp
+	mov     ebp, esp
+	sub     esp, 8
+	mov     eax, [ebp+_argCount]
+	xorps   xmm0, xmm0
+	mov     [ebp+arg_14], eax
+	mov     eax, [ebp+_funcAddress]
+	mov     [ebp+arg_C], eax
+	mov     eax, [ebp+_thisAddress]
+	movlpd  [ebp+result], xmm0
+	mov     [ebp+arg_4], eax
+	pushf
+	mov     edx, [ebp+arg_14]
+	shl     edx, 3
+	mov     ecx, [ebp+argData]
+	add     edx, ecx
+	ThisCallPush_0:
+	cmp     ecx, edx
+	jge     short ThisCallContinue_0
+	mov     eax, [ecx]
+	add     ecx, 8
+	push    eax
+	jmp     short ThisCallPush_0
+	ThisCallContinue_0:
+	mov     eax, [ebp+arg_C]
+	mov     ecx, [ebp+arg_4]
+	call    eax
+	fstp    [ebp+result]
+	popf
+	mov     eax, dword ptr [ebp+result]
+	mov     edx, dword ptr [ebp+result+4]
+	mov     esp, ebp
+	pop     ebp
+	retn    1Ch
+	
+32 bit writenetcode:
+sub esp, 0xB4
+mov [esp+0x0], eax
+mov [esp+0x4], ebx
+mov [esp+0x8], ecx
+mov [esp+0xC], edx
+mov [esp+0x10], edi
+mov [esp+0x14], esi
+mov [esp+0x18], ebp
+mov eax, esp
+add eax, 0xB4
+mov [esp+0x1C], eax
+pushfd
+mov eax, [esp]
+popfd
+mov [esp+0x20], eax
+mov eax, 0x11111111
+mov [esp+0x24], eax
+mov eax, 0x22222222
+mov [esp+0x28], eax
+xor eax, eax
+mov [esp+0x2C], eax
+movsd [esp+0x30], xmm0
+movsd [esp+0x38], xmm1
+movsd [esp+0x40], xmm2
+movsd [esp+0x48], xmm3
+movsd [esp+0x50], xmm4
+movsd [esp+0x58], xmm5
+movsd [esp+0x60], xmm6
+movsd [esp+0x68], xmm7
+xor eax, eax
+mov [esp+0xB0], eax
+lea ecx, [esp+0x70]
+PopFPU:
+fst qword ptr [ecx]
+fstsw ax
+test ax, 0x40
+jne PoppedFPU
+fstp st
+mov eax, [esp+0xB0]
+inc eax
+mov [esp+0xB0], eax
+add ecx, 0x8
+jmp PopFPU
+PoppedFPU:
+mov eax, esp
+push 0x33339999
+push 0x33333333
+push eax
+mov eax, 0x44444444
+call eax
+mov esp, [eax+0x1C]
+mov ebx, [eax+0x4]
+mov edx, [eax+0xC]
+mov edi, [eax+0x10]
+mov esi, [eax+0x14]
+mov ebp, [eax+0x18]
+movsd xmm0, [eax+0x30]
+movsd xmm1, [eax+0x38]
+movsd xmm2, [eax+0x40]
+movsd xmm3, [eax+0x48]
+movsd xmm4, [eax+0x50]
+movsd xmm5, [eax+0x58]
+movsd xmm6, [eax+0x60]
+movsd xmm7, [eax+0x68]
+PushFPU:
+mov ecx, [eax+0xB0]
+test ecx, ecx
+je PushedFPU
+dec ecx
+mov [eax+0xB0], ecx
+lea ecx, [eax+0x70+ecx*8]
+fld qword ptr [ecx]
+jmp PushFPU
+PushedFPU:
+mov ecx, [eax+0x2C]
+test ecx, ecx
+jne SkipAfter
+mov ecx, [eax+0x20]
+pushfd
+mov [esp], ecx
+popfd
+mov ecx, [eax+0x8]
+mov eax, [eax+0x0]
+mov eax, 0x91919191
+sub esp, 0xB4
+mov [esp+0x0], eax
+xor eax, eax
+mov [esp+0x2C], eax
+mov [esp+0x8], ecx
+mov [esp+0xC], edx
+pushfd
+mov eax, [esp]
+popfd
+mov [esp+0x20], eax
+movsd [esp+0x30], xmm0
+movsd [esp+0x38], xmm1
+movsd [esp+0x40], xmm2
+movsd [esp+0x48], xmm3
+movsd [esp+0x50], xmm4
+movsd [esp+0x58], xmm5
+movsd [esp+0x60], xmm6
+movsd [esp+0x68], xmm7
+xor eax, eax
+mov [esp+0xB0], eax
+lea ecx, [esp+0x70]
+PopFPU2:
+fst qword ptr [ecx]
+fstsw ax
+test ax, 0x40
+jne PoppedFPU2
+fstp st
+mov eax, [esp+0xB0]
+inc eax
+mov [esp+0xB0], eax
+add ecx, 0x8
+jmp PopFPU2
+PoppedFPU2:
+mov eax, esp
+push eax
+mov eax, 0x99999999
+call eax
+add esp, 4
+mov edx, [esp+0xC]
+movsd xmm0, [esp+0x30]
+movsd xmm1, [esp+0x38]
+movsd xmm2, [esp+0x40]
+movsd xmm3, [esp+0x48]
+movsd xmm4, [esp+0x50]
+movsd xmm5, [esp+0x58]
+movsd xmm6, [esp+0x60]
+movsd xmm7, [esp+0x68]
+PushFPU2:
+mov ecx, [esp+0xB0]
+test ecx, ecx
+je PushedFPU2
+dec ecx
+mov [esp+0xB0], ecx
+lea ecx, [esp+0x70+ecx*8]
+fld qword ptr [ecx]
+jmp PushFPU2
+PushedFPU2:
+mov eax, [esp+0x20]
+pushfd
+mov [esp], eax
+popfd
+mov ecx, [esp+0x8]
+mov eax, [esp+0x24]
+mov [esp+0xB0], eax
+mov eax, [esp+0x0]
+add esp, 0xB0
+ret
+SkipAfter:
+mov ecx, [eax+0x20]
+pushfd
+mov [esp], ecx
+popfd
+mov ecx, [eax+0x8]
+mov eax, [eax+0x0]
+sub esp, 0xB4
+mov [esp+0x0], eax
+mov eax, 1
+mov [esp+0x2C], eax
+mov [esp+0x8], ecx
+mov [esp+0xC], edx
+pushfd
+mov eax, [esp]
+popfd
+mov [esp+0x20], eax
+movsd [esp+0x30], xmm0
+movsd [esp+0x38], xmm1
+movsd [esp+0x40], xmm2
+movsd [esp+0x48], xmm3
+movsd [esp+0x50], xmm4
+movsd [esp+0x58], xmm5
+movsd [esp+0x60], xmm6
+movsd [esp+0x68], xmm7
+xor eax, eax
+mov [esp+0xB0], eax
+lea ecx, [esp+0x70]
+PopFPU3:
+fst qword ptr [ecx]
+fstsw ax
+test ax, 0x40
+jne PoppedFPU3
+fstp st
+mov eax, [esp+0xB0]
+inc eax
+mov [esp+0xB0], eax
+add ecx, 0x8
+jmp PopFPU3
+PoppedFPU3:
+mov eax, esp
+push eax
+mov eax, 0x99999999
+call eax
+add esp, 4
+mov edx, [esp+0xC]
+movsd xmm0, [esp+0x30]
+movsd xmm1, [esp+0x38]
+movsd xmm2, [esp+0x40]
+movsd xmm3, [esp+0x48]
+movsd xmm4, [esp+0x50]
+movsd xmm5, [esp+0x58]
+movsd xmm6, [esp+0x60]
+movsd xmm7, [esp+0x68]
+PushFPU3:
+mov ecx, [esp+0xB0]
+test ecx, ecx
+je PushedFPU3
+dec ecx
+mov [esp+0xB0], ecx
+lea ecx, [esp+0x70+ecx*8]
+fld qword ptr [ecx]
+jmp PushFPU3
+PushedFPU3:
+mov eax, [esp+0x20]
+pushfd
+mov [esp], eax
+popfd
+mov ecx, [esp+0x8]
+mov eax, [esp+0x24]
+mov [esp+0xB0], eax
+mov eax, [esp+0x0]
+add esp, 0xB0
+ret
+
+64 bit net hook:
+pushfq
+test rsp, 8
+jne NormalPush
+popfq
+pushfq
+pushfq
+sub rsp, 0x1E8
+mov qword ptr [rsp+0xE8], 1
+jmp DonePush
+NormalPush:
+sub rsp, 0x1E8
+mov qword ptr [rsp+0xE8], 0
+DonePush:
+
+mov [rsp+0x0], rax
+mov [rsp+0x8], rbx
+mov [rsp+0x10], rcx
+mov [rsp+0x18], rdx
+mov [rsp+0x20], rdi
+mov [rsp+0x28], rsi
+mov [rsp+0x30], rbp
+mov rax, rsp
+add rax, 0x1F0
+mov [rsp+0x38], rax
+mov rax, [rsp+0x1E8]
+mov [rsp+0x40], rax
+mov [rsp+0x60], r8
+mov [rsp+0x68], r9
+mov [rsp+0x70], r10
+mov [rsp+0x78], r11
+mov [rsp+0x80], r12
+mov [rsp+0x88], r13
+mov [rsp+0x90], r14
+mov [rsp+0x98], r15
+
+movdqa [rsp+0xF0], xmm0
+movdqa [rsp+0x100], xmm1
+movdqa [rsp+0x110], xmm2
+movdqa [rsp+0x120], xmm3
+movdqa [rsp+0x130], xmm4
+movdqa [rsp+0x140], xmm5
+movdqa [rsp+0x150], xmm6
+movdqa [rsp+0x160], xmm7
+movdqa [rsp+0x170], xmm8
+movdqa [rsp+0x180], xmm9
+movdqa [rsp+0x190], xmm10
+movdqa [rsp+0x1A0], xmm11
+movdqa [rsp+0x1B0], xmm12
+movdqa [rsp+0x1C0], xmm13
+movdqa [rsp+0x1D0], xmm14
+movdqa [rsp+0x1E0], xmm15
+
+xor rax, rax
+mov [rsp+0xE0], rax
+lea rcx, [rsp+0xA0]
+PopFPU:
+fst qword ptr [rcx]
+fstsw ax
+test ax, 0x40
+jne PoppedFPU
+fstp st
+mov rax, [rsp+0xE0]
+inc rax
+mov [rsp+0xE0], rax
+add rcx, 0x8
+jmp PopFPU
+PoppedFPU:
+
+mov rcx, rsp
+mov rdx, 0x3333333333333333
+mov r8, 0x3333999933339999
+mov rax, 0x4444444444444444
+sub rsp, 0x20
+call rax
+
+mov rbx, [rax+0x8]
+mov rdx, [rax+0x18]
+mov rdi, [rax+0x20]
+mov rsi, [rax+0x28]
+mov rbp, [rax+0x30]
+mov rsp, [rax+0x38]
+mov r8, [rax+0x60]
+mov r9, [rax+0x68]
+mov r10, [rax+0x70]
+mov r11, [rax+0x78]
+mov r12, [rax+0x80]
+mov r13, [rax+0x88]
+mov r14, [rax+0x90]
+mov r15, [rax+0x98]
+
+movdqa xmm0, [rax+0xF0]
+movdqa xmm1, [rax+0x100]
+movdqa xmm2, [rax+0x110]
+movdqa xmm3, [rax+0x120]
+movdqa xmm4, [rax+0x130]
+movdqa xmm5, [rax+0x140]
+movdqa xmm6, [rax+0x150]
+movdqa xmm7, [rax+0x160]
+movdqa xmm8, [rax+0x170]
+movdqa xmm9, [rax+0x180]
+movdqa xmm10, [rax+0x190]
+movdqa xmm11, [rax+0x1A0]
+movdqa xmm12, [rax+0x1B0]
+movdqa xmm13, [rax+0x1C0]
+movdqa xmm14, [rax+0x1D0]
+movdqa xmm15, [rax+0x1E0]
+
+PushFPU:
+mov rcx, [rax+0xE0]
+test rcx, rcx
+je PushedFPU
+dec rcx
+mov [rax+0xE0], rcx
+lea rcx, [rax+0xA0+rcx*8]
+fld qword ptr [rcx]
+jmp PushFPU
+PushedFPU:
+
+mov rcx, [rax+0x40]
+pushfq
+mov [rsp], rcx
+popfq
+mov rcx, [rax+0x58]
+push rcx
+mov rcx, [rax+0x10]
+mov rax, [rax+0x0]
+
+// INCLUDED code
+ret
+
+pop rax
+pushfq
+test rsp, 8
+jne NormalPush
+popfq
+pushfq
+pushfq
+sub rsp, 0x1E8
+mov qword ptr [rsp+0xE8], 1
+jmp DonePush
+NormalPush:
+sub rsp, 0x1E8
+mov qword ptr [rsp+0xE8], 0
+DonePush:
+
+mov [rsp+0x0], rax
+mov [rsp+0x10], rcx
+mov [rsp+0x18], rdx
+mov rax, [rsp+0x1E8]
+mov [rsp+0x40], rax
+mov [rsp+0x60], r8
+mov [rsp+0x68], r9
+mov [rsp+0x70], r10
+mov [rsp+0x78], r11
+movdqa [rsp+0xF0], xmm0
+movdqa [rsp+0x100], xmm1
+movdqa [rsp+0x110], xmm2
+movdqa [rsp+0x120], xmm3
+movdqa [rsp+0x130], xmm4
+movdqa [rsp+0x140], xmm5
+xor rax, rax
+mov [rsp+0xE0], rax
+lea rcx, [rsp+0xA0]
+PopFPU2:
+fst qword ptr [rcx]
+fstsw ax
+test ax, 0x40
+jne PoppedFPU2
+fstp st
+mov rax, [rsp+0xE0]
+inc rax
+mov [rsp+0xE0], rax
+add rcx, 0x8
+jmp PopFPU2
+PoppedFPU2:
+
+mov rcx, rsp
+mov rax, 0x9999999999999999
+sub rsp, 0x20
+call rax
+add rsp, 0x20
+
+mov rdx, [rsp+0x18]
+mov r8, [rsp+0x60]
+mov r9, [rsp+0x68]
+mov r10, [rsp+0x70]
+mov r11, [rsp+0x78]
+movdqa xmm0, [rsp+0xF0]
+movdqa xmm1, [rsp+0x100]
+movdqa xmm2, [rsp+0x110]
+movdqa xmm3, [rsp+0x120]
+movdqa xmm4, [rsp+0x130]
+movdqa xmm5, [rsp+0x140]
+PushFPU2:
+mov rcx, [rsp+0xE0]
+test rcx, rcx
+je PushedFPU2
+dec rcx
+mov [rsp+0xE0], rcx
+lea rcx, [rsp+0xA0+rcx*8]
+fld qword ptr [rcx]
+jmp PushFPU2
+PushedFPU2:
+
+test byte ptr [rsp+0xE8], 1
+je NormalPop
+mov rcx, [rsp+0x10]
+mov rax, [rsp+0x48]
+mov [rsp+0x1F0], rax
+mov rax, [rsp+0x40]
+mov [rsp+0x1E8], rax
+add rsp, 0x1E8
+popfq
+mov rax, [rsp-0x1F0]
+ret
+NormalPop:
+mov rcx, [rsp+0x10]
+mov rax, [rsp+0x48]
+mov [rsp+0x1E8], rax
+mov rax, [rsp+0x40]
+mov [rsp+0x1E0], rax
+add rsp, 0x1E0
+popfq
+mov rax, [rsp-0x1E8]
+ret
